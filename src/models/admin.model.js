@@ -1,9 +1,9 @@
 import mongoose from "mongoose"
 
-const creatorSchema = new mongoose.Schema({
-    creatorName: {
+const adminSchema = new mongoose.Schema({
+    adminName: {
         type: String,
-        required: [true, 'Creatorname is required.'],    
+        required: [true, 'Name is required.'],    
     },
     emailId: {
         type: String,
@@ -17,4 +17,4 @@ const creatorSchema = new mongoose.Schema({
     },
 }, {timestamps: true})
 
-export const Creator = mongoose.model("Creator", creatorSchema)
+export const Admin = mongoose.model("Admin", adminSchema)

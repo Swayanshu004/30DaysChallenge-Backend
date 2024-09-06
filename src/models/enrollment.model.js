@@ -1,7 +1,7 @@
 import mongoose from "mongoose"
 
 const enrollmentSchema = new mongoose.Schema({
-    challengeID: {
+    challengeId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Challenge"
     },

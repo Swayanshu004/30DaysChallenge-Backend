@@ -9,9 +9,9 @@ const challengeSchema = new mongoose.Schema({
         type: Number,
         required: [true, 'Challenge duration is required.']
     },
-    creatorId: {
+    adminId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Creator"
+        ref: "Admin"
     },
     tasks: [
         {
