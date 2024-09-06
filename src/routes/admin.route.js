@@ -1,32 +1,33 @@
 import express from "express"
-import { Creator } from "../models/creator.model.js"
+import { Admin } from "../models/admin.model.js"
+import { Challenge } from "../models/challenge.model.js"
 
 const router = express.Router();
 router
     .post('/signin',async(req, res)=>{
-        const {emailId, password, creatorName} = req.body;
+        const {emailId, password, adminName} = req.body;
         
-        const existedCreator = await Creator.findOne({
+        const existedAdmin = await Admin.findOne({
             $or: [{ emailId }]
         })
-        if(existedCreator){
-            const checkpassword = await Creator.isPasswordCorrect(password);
+        if(existedAdmin){
+            const checkpassword = await Admin.isPasswordCorrect(password);
             if(!checkpassword) {
                 res.status(401).send("Incorrect Password ! !")
             }
             const token = jwt.sign({ 
-                creatorId: existedCreator.id,
-            }, process.env.JWT_SECRET_CREATOR)
+                adminId: existedAdmin.id,
+            }, process.env.JWT_SECRET_ADMIN)
             res.status(201).json({token});
         } else {
-            const creator = await Creator.create({
-                creatorName,
+            const admin = await Admin.create({
+                adminName,
                 emailId,
                 password
             })
             const token = jwt.sign({
-                creatorId: creator.id,
-            }, process.env.JWT_SECRET_CREATOR)
+                adminId: admin.id,
+            }, process.env.JWT_SECRET_ADMIN)
             res.status(201).json({token});
         }
     })
@@ -36,15 +37,28 @@ router
     })
 router
     .post('/addTask/:challengeID',async(req, res)=>{
-// query over collection model, add new task to the tasks Array       
+             
     })
 router
     .get('/adminData',async(req, res)=>{
-
+        const adminId = req.adminId;
+        const admin = await Admin.findOne({
+            $or: [{ _id: adminId }]
+        })
+        if(!admin){
+            res.status(401).send("No Admin Found ! !")
+        }
+        res.status(201).json({admin})
     })
 router
     .get('/alltask/:challenge',async(req, res)=>{
-
+        const challengeId = req.params.challenge;
+        const challenge = await Challenge.findOne({
+            $or: [{ _id: challengeId }]
+        })
+        if(!challengeId){
+            res.status(201).json({challenge})
+        }
     })
 
 
