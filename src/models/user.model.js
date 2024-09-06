@@ -20,7 +20,7 @@ const userSchema = new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: "Challenge"
         }
-    ]
+    ],
 }, {timestamps: true})
 
 export const User = mongoose.model("User", userSchema)

@@ -4,8 +4,8 @@ function authMiddlewareAdmin(req, res, next){
     const authHeader = req.header("authorization");
     try {
         const decoded = jwt.verify(authHeader,process.env.JWT_SECRET_ADMIN);
-        if(decoded.adminId){
-            req.adminId = decoded.adminId;            
+        if(decoded.creatorId){
+            req.creatorId = decoded.creatorId;            
             return next();
         } else {
             return res.status(401).json({mesasage: "no admin found ! !"});

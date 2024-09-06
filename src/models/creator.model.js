@@ -14,7 +14,7 @@ const creatorSchema = new mongoose.Schema({
         type: String,
         required: [true, 'Password cannot be empty. Please enter a password.'],
         lowercase: true
-    }
+    },
 }, {timestamps: true})
 
 export const Creator = mongoose.model("Creator", creatorSchema)
