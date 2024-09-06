@@ -9,7 +9,7 @@ const challengeSchema = new mongoose.Schema({
         type: Number,
         required: [true, 'Challenge duration is required.']
     },
-    createdBy: {
+    creatorId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Creator"
     },
