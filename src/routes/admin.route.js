@@ -57,8 +57,9 @@ router
             $or: [{ _id: challengeId }]
         })
         if(!challengeId){
-            res.status(201).json({challenge})
+            res.status(401).send("No Challenge Found ! !")
         }
+        res.status(201).json({challenge})
     })
 
 

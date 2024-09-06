@@ -1,5 +1,6 @@
 import express from "express"
 import { User } from "../models/user.model.js"
+import { Challenge } from "../models/challenge.model.js"
 
 const router = express.Router();
 router
@@ -48,15 +49,33 @@ router
     })
 router
     .get('/allChallenge',async(req, res)=>{
-//  
-    })
-router
-    .get('/allTask/:challengeId',async(req, res)=>{
-//  
+        const challenge = await Challenge.find()
+        if(!challenge){
+            res.status(401).send("No Challenge Found ! !")
+        }
+        res.status(201).json({challenge})
     })
 router
     .get('/userData',async(req, res)=>{
-//  
+        const userId = req.userId;
+        const user = await User.findOne({
+            $or: [{ _id: userId }]
+        })
+        if(!user){
+            res.status(401).send("No User Found ! !")
+        }
+        res.status(201).json({user})
+    })
+router
+    .get('/allTask/:challengeId',async(req, res)=>{
+        const challengeId = req.params.challengeId;
+        const challenge = await Challenge.findOne({
+            $or: [{ _id: challengeId }]
+        })
+        if(!challenge){
+            res.status(401).send("No Challenge Found ! !")
+        }
+        res.status(201).json({challenge})
     })
 
 
