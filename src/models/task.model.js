@@ -28,7 +28,7 @@ const taskSchema = new mongoose.Schema({
             }
         ],
         required: [true, "At least one resource is required."]
-    }
+    },
 }, {timestamps: true})
 
 export const Task = mongoose.model("Task", taskSchema)
