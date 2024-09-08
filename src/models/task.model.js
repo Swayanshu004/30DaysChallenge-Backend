@@ -28,10 +28,6 @@ const taskSchema = new mongoose.Schema({
             }
         ],
         required: [true, "At least one resource is required."]
-    },
-    completed: {
-        type: Boolean,
-        default: false
     }
 }, {timestamps: true})
 
