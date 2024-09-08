@@ -5,8 +5,15 @@ import { Challenge } from "../models/challenge.model.js"
 const router = express.Router();
 router
     .post('/signin',async(req, res)=>{
+        let imageLocalPath;
+        try {
+            imageLocalPath = req.file.path;
+        } catch (error) {
+            console.error("no image found in req - ",error);
+        }
+        const cloudinaryLink = await uploadOnCloudinary(imageLocalPath);
+        const profileImage = cloudinaryLink.url;
         const {emailId, password, userName} = req.body;
-        
         const existedUser = await User.findOne({
             $or: [{ emailId }]
         })
@@ -23,6 +30,7 @@ router
             const user = await User.create({
                 userName,
                 emailId,
+                profileImage,
                 password
             })
             const token = jwt.sign({

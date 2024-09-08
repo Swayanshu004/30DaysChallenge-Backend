@@ -5,10 +5,6 @@ const resourceSchema = new mongoose.Schema({
         type: String,
         required: [true, 'Link is required.']
     },
-    coverImage: {
-        type: String,
-        required: [true, 'Image url is required.']
-    },
     type: {
         type: String,
         enum: ['Blog', 'Video', 'Document'],

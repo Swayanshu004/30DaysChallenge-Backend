@@ -11,7 +11,14 @@ import { upload } from "../middlewares/multer.middlewares.js";
 const router = express.Router();
 router
     .post('/signin', upload.single('coverImage'), async(req, res)=>{
-        //      add profileImage
+        let imageLocalPath;
+        try {
+            imageLocalPath = req.file.path;
+        } catch (error) {
+            console.error("no image found in req - ",error);
+        }
+        const cloudinaryLink = await uploadOnCloudinary(imageLocalPath);
+        const profileImage = cloudinaryLink.url;
         const {emailId, password, adminName} = req.body;
         const existedAdmin = await Admin.findOne({
             $or: [{ emailId }]
@@ -29,6 +36,7 @@ router
             const admin = await Admin.create({
                 adminName,
                 emailId,
+                profileImage,
                 password
             })
             const token = jwt.sign({
@@ -39,12 +47,20 @@ router
     })
 router
     .post('/newChallenge', upload.single('coverImage'), async(req, res)=>{
-        //      add coverImage
+        let imageLocalPath;
+        try {
+            imageLocalPath = req.file.path;
+        } catch (error) {
+            console.error("no image found in req - ",error);
+        }
+        const cloudinaryLink = await uploadOnCloudinary(imageLocalPath);
+        const coverImage = cloudinaryLink.url;
         const { title, duration } = req.body;
         const adminId = req.adminId;
         const challenge = await Challenge.create({
             title,
             duration,
+            coverImage,
             tasks: [],
             enrolledUserCount: 0,
             adminId

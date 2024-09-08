@@ -9,6 +9,10 @@ const challengeSchema = new mongoose.Schema({
         type: Number,
         required: [true, 'Challenge duration is required.']
     },
+    coverImage: {
+        type: String,
+        required: [true, 'Image url is required.']
+    },
     adminId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Admin"

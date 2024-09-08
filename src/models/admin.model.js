@@ -11,6 +11,10 @@ const adminSchema = new mongoose.Schema({
         required: [true, 'Email is required.'],
         unique: true
     },
+    pofileImage: {
+        type: String,
+        required: [true, 'Image url is required.']
+    },
     password: {
         type: String,
         required: [true, 'Password cannot be empty. Please enter a password.'],
