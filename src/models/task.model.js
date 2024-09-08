@@ -12,7 +12,7 @@ const taskSchema = new mongoose.Schema({
                 ref: "Question",
             }
         ],
-        required: [true, "At least one question is required."]
+        required: true
     },
     exercises: [
         {
@@ -27,8 +27,17 @@ const taskSchema = new mongoose.Schema({
                 ref: "Resource",
             }
         ],
-        required: [true, "At least one resource is required."]
+        required: true
     },
+    completed: {
+        type: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "User",
+            }
+        ],
+        required: true
+    }
 }, {timestamps: true})
 
 export const Task = mongoose.model("Task", taskSchema)
