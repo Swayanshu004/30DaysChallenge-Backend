@@ -5,13 +5,14 @@ import { Task } from "../models/task.model.js"
 import { Question } from "../models/question.model.js"
 import { Resource } from "../models/resource.model.js"
 import { Exercise } from "../models/exercise.model.js"
+import { upload } from "../middlewares/multer.middlewares.js"; 
 
 
 const router = express.Router();
 router
-    .post('/signin',async(req, res)=>{
+    .post('/signin', upload.single('coverImage'), async(req, res)=>{
+        //      add profileImage
         const {emailId, password, adminName} = req.body;
-        
         const existedAdmin = await Admin.findOne({
             $or: [{ emailId }]
         })
@@ -37,7 +38,8 @@ router
         }
     })
 router
-    .post('/newChallenge',async(req, res)=>{
+    .post('/newChallenge', upload.single('coverImage'), async(req, res)=>{
+        //      add coverImage
         const { title, duration } = req.body;
         const adminId = req.adminId;
         const challenge = await Challenge.create({
@@ -53,7 +55,7 @@ router
         res.status(201).json({challenge})
     })
 router
-    .post('/addTask/:challengeID',async(req, res)=>{
+    .post('/addTask/:challengeId',  async(req, res)=>{
         const { title, questions, exercises, resources } = req.body;
         const questionObj = [];
         questions.map(async (item, index)=>{
@@ -72,11 +74,11 @@ router
             })
             exerciseObj = [...exerciseObj, newExercise._id]
         })
+
         const resourceObj = [];
         resources.map(async (item, index)=>{
             const newResource = await Resource.create({
                 link: item.link,
-                coverImage: item.coverImage,
                 type: item.type
             })
             resourceObj = [...resourceObj, newResource._id]
@@ -91,7 +93,12 @@ router
         if(!task) {
             res.status(401).send("Some Error in Creating Task ! !")
         }
-        res.status(201).send(task._id)
+
+        const challenge = await Challenge.updateOne(
+            { _id: req.query.challengeId },
+            { $push: { tasks: task._id } }
+        )
+        res.status(201).json({challenge})
     })
 router
     .get('/adminData',async(req, res)=>{
