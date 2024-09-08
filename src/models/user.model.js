@@ -18,10 +18,17 @@ const userSchema = new mongoose.Schema({
     },
     enrolledChallenges: [
         {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Enrollment"
+            challengeId: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "Challenge",
+                required: true
+            },
+            enrolledAt: {
+                type: Date,
+                default: Date.now
+            }
         }
-    ],
+    ]
 }, {timestamps: true})
 userSchema.pre("save" , async function(next){ 
     if(!this.isModified("password")) return next();
