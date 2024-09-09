@@ -5,7 +5,7 @@ import { Task } from "../models/task.model.js"
 import { Question } from "../models/question.model.js"
 import { Resource } from "../models/resource.model.js"
 import { Exercise } from "../models/exercise.model.js"
-import { upload } from "../middlewares/multer.middlewares.js"; 
+import { upload } from "../middlewares/multer.middleware.js"; 
 
 
 const router = express.Router();

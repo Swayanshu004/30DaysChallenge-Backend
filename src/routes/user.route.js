@@ -1,10 +1,13 @@
 import express from "express"
 import { User } from "../models/user.model.js"
 import { Challenge } from "../models/challenge.model.js"
+import { upload } from "../middlewares/multer.middleware.js"
+import { Enrollment } from "../models/enrollment.model.js";
+import { Task } from "../models/task.model.js"
 
 const router = express.Router();
 router
-    .post('/signin',async(req, res)=>{
+    .post('/signin', upload.single('coverImage'), async(req, res)=>{
         let imageLocalPath;
         try {
             imageLocalPath = req.file.path;
@@ -40,12 +43,37 @@ router
         }
     })
 router
-    .post('/register',async(req, res)=>{
-//  
+    .post('/register/:challengeId',async(req, res)=>{
+        const enrollment = await Enrollment.create({
+            challengeId: req.query.challengeId,
+        })
+        const updateUser = await User.updateOne(
+            { _id: req.userId },
+            { $push: { enrollments: enrollment._id } 
+        })
+        if(!updateUser){
+            res.status(401).send("Error in updating User ! !")
+        }
+        res.status(201).json({updateUser})
     })
 router
-    .post('/verifyMCQ',async(req, res)=>{
-//  
+    .post('/verifyMCQ/:taskId',async(req, res)=>{
+        const questions = req.body
+        const task = await Task.findOne({
+            $or: [{ _id: adminId }]
+        })
+        const mark = {}
+        questions.map(async (item, index)=>{
+            const taskQuestion = await task.questions.findOne({
+                $or: [{ question: item.question }]
+            })
+            if(taskQuestion.options[taskQuestion.answer] === item.answer){
+                mark = {...mark, index: 'True'}
+            } else {
+                mark = {...mark, index: 'False'}
+            }
+        })
+        res.status(201).json({mark})
     })
 router
     .post('/verifyExcercise',async(req, res)=>{

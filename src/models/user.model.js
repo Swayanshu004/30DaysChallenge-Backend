@@ -20,19 +20,15 @@ const userSchema = new mongoose.Schema({
         required: [true, 'Password cannot be empty. Please enter a password.'],
         lowercase: true
     },
-    enrolledChallenges: [
-        {
-            challengeId: {
+    enrollments: {
+        type: [
+            {
                 type: mongoose.Schema.Types.ObjectId,
-                ref: "Challenge",
-                required: true
-            },
-            enrolledAt: {
-                type: Date,
-                default: Date.now
+                ref: "Enrollments",
             }
-        }
-    ]
+        ],
+        required: true
+    },
 }, {timestamps: true})
 userSchema.pre("save" , async function(next){ 
     if(!this.isModified("password")) return next();
